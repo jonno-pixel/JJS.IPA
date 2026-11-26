@@ -7,13 +7,13 @@ targets:
     platform: iOS
     deploymentTarget: "17.0"
     sources:
-      - path: Sources
-        excludes:
-          - Info.plist
+      - path: .
+        includes:
+          - "*.swift"
     settings:
       base:
-        INFOPLIST_FILE: Sources/Info.plist
+        INFOPLIST_FILE: Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: com.jonnopixel.jjs
         CODE_SIGN_IDENTITY: ""
         CODE_SIGNING_REQUIRED: "NO"
-        CODE_SIGNING_ALLOWED: "NO"
+        CODE_SIGNING_ALLOWED: "YES"
