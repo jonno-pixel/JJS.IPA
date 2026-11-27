@@ -12,6 +12,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Free disk space
+        run: |
+          echo "Disk space before cleanup:"
+          df -h /
+
+          sudo rm -rf /Applications/Xcode_*.app/Contents/Developer/Platforms/AppleTV* || true
+          sudo rm -rf /Applications/Xcode_*.app/Contents/Developer/Platforms/Watch* || true
+          sudo rm -rf /Users/runner/Library/Developer/CoreSimulator/Caches || true
+          sudo rm -rf /Users/runner/Library/Developer/Xcode/DerivedData || true
+          sudo rm -rf /Users/runner/hostedtoolcache/CodeQL || true
+          sudo rm -rf /usr/local/lib/android || true
+
+          echo "Disk space after cleanup:"
+          df -h /
+
       - name: Install XcodeGen
         run: brew install xcodegen
 
@@ -20,11 +35,12 @@ jobs:
 
       - name: Build JJS App
         run: |
-          xcodebuild -project JJS.xcodeproj \
+          xcodebuild -quiet -project JJS.xcodeproj \
             -scheme JJS \
             -configuration Release \
             -sdk iphoneos \
             -derivedDataPath build \
+            COMPILER_INDEX_STORE_ENABLE=NO \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO
